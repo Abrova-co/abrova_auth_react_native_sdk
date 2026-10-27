@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+lib/
+dist/
+*.tsbuildinfo
+
+# Example app
+example-app/node_modules/
+example-app/ios/build/
+example-app/ios/Pods/
+example-app/ios/Podfile.lock
+example-app/ios/*.xcworkspace/
+example-app/android/build/
+example-app/android/.gradle/
+example-app/android/app/build/
+example-app/vendor/bundle/
+example-app/.bundle/vendor/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env*.local
+*.env
+
+# Claude
+.claude/
