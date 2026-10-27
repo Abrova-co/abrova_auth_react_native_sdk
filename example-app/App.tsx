@@ -15,9 +15,11 @@ import { createAbrovaAuth, isAbrovaAuthError, keychainStorage } from '@abrova/au
 
 // Your project's PUBLIC key from Abrova Console (ab_live_...). Never put the server secret in an app.
 const API_KEY = 'ab_live_YOUR_PUBLIC_KEY';
+// Optional: another Auth server, for example one you run yourself. Empty = the default server.
+const SERVER_URL = '';
 
 // The refresh token is kept in the Keychain / Keystore, so the user stays signed in after a restart.
-const auth = createAbrovaAuth({ apiKey: API_KEY, storage: keychainStorage(Keychain) });
+const auth = createAbrovaAuth({ apiKey: API_KEY, baseUrl: SERVER_URL || undefined, storage: keychainStorage(Keychain) });
 
 function describe(error: unknown): string {
   if (isAbrovaAuthError(error)) return `${error.code}: ${error.message}`;
