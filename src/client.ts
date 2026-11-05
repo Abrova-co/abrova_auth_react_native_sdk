@@ -3,6 +3,7 @@ import { createNonce, SignInNonce } from './nonce';
 import { MemoryStorage, AbrovaAuthStorage } from './storage';
 import { SDK_NAME, SDK_VERSION } from './version';
 import type {
+  AbrovaTokenResult,
   AppleSignInInput,
   AuthStateListener,
   EmailPasswordInput,
@@ -16,6 +17,7 @@ import type {
   SignUpResult,
   TelegramCodeResult,
 } from './types';
+import { tokenResultOf } from './token-result';
 
 /** Sent with every request so Abrova can show which SDK versions are in use (version comes from package.json). */
 const SDK_HEADER = `auth-${SDK_NAME}/${SDK_VERSION}`;
@@ -136,6 +138,17 @@ export class AbrovaAuth {
       return s.accessToken;
     }
     return this.refresh();
+  }
+
+  /**
+   * The access token with its decoded fields, like Firebase's `getIdTokenResult()`: `claims` holds the custom claims
+   * your server set (`setCustomUserClaims`), for example to show a "Pro" badge. Null when signed out. Pass
+   * `{ forceRefresh: true }` right after your server changed the claims, to get them without waiting for the next
+   * refresh (at most an hour). For display only: access is decided on the server.
+   */
+  async getTokenResult(options: { forceRefresh?: boolean } = {}): Promise<AbrovaTokenResult | null> {
+    const token = await this.getToken(options);
+    return token ? tokenResultOf(token) : null;
   }
 
   /**

@@ -180,6 +180,21 @@ await auth.signOutEverywhere();    // every device
 await auth.deleteAccount();        // deletes the user, then signs out (required by the App Store)
 ```
 
+## Custom claims
+
+Your server sets custom claims for a user with the server secret (`setCustomUserClaims`, see
+[Custom claims](https://abrova.ir/docs/auth/custom-claims)), for example `{ "plan": "pro" }`. Every token of the
+user carries them, and Abrova Sync rules read them as `auth.token.plan`. In the app, read them to show things
+(a "Pro" badge): access is still decided on the server.
+
+```ts
+const result = await auth.getTokenResult();
+if (result?.claims.plan === 'pro') showProBadge();
+
+// Right after your server changed the claims ("Check my purchase"):
+await auth.getTokenResult({ forceRefresh: true });
+```
+
 ## Errors
 
 Every failure is a `AbrovaAuthError` with a `code`:

@@ -8,6 +8,7 @@ export type { KeychainModule, SecureStoreModule } from './secure-storage';
 export { createNonce } from './nonce';
 export type { SignInNonce } from './nonce';
 export { SDK_NAME, SDK_VERSION } from './version';
+export { decodeTokenPayload } from './token-result';
 export type {
   AppleSignInInput,
   AuthStateListener,
@@ -18,6 +19,7 @@ export type {
   AbrovaAuthMethod,
   AbrovaAuthMethods,
   AbrovaTokenProvider,
+  AbrovaTokenResult,
   AbrovaUser,
   SignInResult,
   SignUpResult,
