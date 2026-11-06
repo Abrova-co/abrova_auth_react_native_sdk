@@ -63,6 +63,7 @@ export class AbrovaAuth {
   private readonly fetchFn: FetchLike;
   private readonly now: () => number;
 
+  private language: string | null = null;
   private session: Session | null = null;
   private user: AbrovaUser | null = null;
   /** Bumped whenever the session is replaced or cleared, so a slower request never overwrites newer state. */
@@ -84,7 +85,35 @@ export class AbrovaAuth {
     const globalFetch = (globalThis as { fetch?: FetchLike }).fetch;
     this.fetchFn = config.fetch ?? ((url, init) => (globalFetch as FetchLike)(url, init));
     this.now = now;
+    this.languageCode = config.languageCode ?? null;
     this.readyPromise = this.restore();
+  }
+
+  // ── Language ──────────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * The language of the e-mails Abrova sends (confirm e-mail, password reset, magic link), like Firebase's
+   * `auth.languageCode`: a BCP 47 tag such as `fa` or `en-US`. null = the project's template language (Console ›
+   * Abrova Auth › Email templates). A language Abrova has no texts for also falls back to the template language.
+   */
+  get languageCode(): string | null {
+    return this.language;
+  }
+
+  set languageCode(value: string | null) {
+    const v = typeof value === 'string' ? value.trim() : '';
+    this.language = v && v.length <= 35 && /^[A-Za-z]{2,8}([-_][A-Za-z0-9]{1,8})*$/.test(v) ? v : null;
+  }
+
+  /** Sets `languageCode` to the phone's language (through `Intl`), like Firebase's `useDeviceLanguage()`. */
+  useDeviceLanguage(): void {
+    let locale: string | null = null;
+    try {
+      locale = Intl.DateTimeFormat().resolvedOptions().locale ?? null;
+    } catch {
+      locale = null;
+    }
+    this.languageCode = locale;
   }
 
   // ── State ─────────────────────────────────────────────────────────────────────────────────────
@@ -427,6 +456,7 @@ export class AbrovaAuth {
     };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (bearer) headers.Authorization = `Bearer ${bearer}`;
+    if (this.language) headers['x-abrova-locale'] = this.language;
 
     const AC = (globalThis as { AbortController?: new () => { signal: unknown; abort(): void } }).AbortController;
     const controller = AC ? new AC() : undefined;

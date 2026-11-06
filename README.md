@@ -195,6 +195,18 @@ if (result?.claims.plan === 'pro') showProBadge();
 await auth.getTokenResult({ forceRefresh: true });
 ```
 
+## E-mail language
+
+Confirm e-mail, password reset and magic-link e-mails go out in the language you set, like Firebase's `languageCode`.
+Unset, the project's template language from the Console applies. Edit the texts in **Console › Abrova Auth › Email
+templates**.
+
+```ts
+auth.languageCode = 'fa'; // or auth.useDeviceLanguage()
+```
+
+See [Email templates](https://abrova.ir/docs/auth/email-templates).
+
 ## Errors
 
 Every failure is a `AbrovaAuthError` with a `code`:

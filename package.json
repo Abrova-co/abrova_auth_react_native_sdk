@@ -1,6 +1,6 @@
 {
   "name": "@abrova/auth-react-native",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Abrova Auth SDK for React Native - hosted sign-in for your users",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
