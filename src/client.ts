@@ -56,7 +56,8 @@ interface Stored {
  */
 export class AbrovaAuth {
   private readonly apiKey: string;
-  private readonly baseUrl: string;
+  /** The Abrova Auth server this client talks to. */
+  readonly baseUrl: string;
   private readonly storage: AbrovaAuthStorage;
   private readonly storageKey: string;
   private readonly timeoutMs: number;
@@ -252,8 +253,11 @@ export class AbrovaAuth {
     return this.signIn(await this.request<ServerTokens>('POST', '/v1/password/sign-in', { email: input.email, password: input.password }));
   }
 
-  /** Sends a reset link to `redirectUrl?token=…`. Answers the same whether or not the address has an account. */
-  async sendPasswordReset(input: { email: string; redirectUrl: string }): Promise<void> {
+  /**
+   * Sends a reset link to `redirectUrl?token=…`, or to Abrova's own reset page when `redirectUrl` is left out.
+   * Answers the same whether or not the address has an account.
+   */
+  async sendPasswordReset(input: { email: string; redirectUrl?: string }): Promise<void> {
     await this.request('POST', '/v1/password/forgot', { email: input.email, redirectUrl: input.redirectUrl });
   }
 

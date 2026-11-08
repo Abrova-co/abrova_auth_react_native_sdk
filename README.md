@@ -27,6 +27,7 @@
 - **Expo or bare**: `react-native-keychain` or `expo-secure-store`
 - **Fresh tokens**: the access token is renewed before it expires; concurrent calls share one renewal
 - **One user for every Abrova product**: hand the token to Abrova Sync, Chat, Push and A/B Testing
+- **Ready-made sign-in screen**, like FirebaseUI, in English and Persian
 - **Same API as the web SDK**, pure TypeScript, no native code of its own
 
 ## Installation
@@ -127,13 +128,56 @@ When the user signs in or out, ask the other SDKs to fetch a new token (for exam
 `AbrovaSync.refreshUserToken()` and `AbrovaAbTesting.refreshUserToken()`), ideally from `onAuthStateChanged`. More:
 [Use with other Abrova products](https://abrova.ir/cloud/abrova-auth/docs/other-products).
 
+## Ready-made sign-in screen
+
+Like FirebaseUI: Abrova's sign-in screen, with no forms to build. It shows only the methods turned on in the Console
+and answers once the user signed in, or `null` when they closed it.
+
+```tsx
+import { useAbrovaSignIn } from '@abrova/auth-react-native/ui';
+
+function Account() {
+  const signIn = useAbrovaSignIn(auth, { appName: 'My Shop' });
+  return (
+    <>
+      <Button
+        title="Sign in"
+        onPress={async () => {
+          const result = await signIn.open();
+          if (result) console.log('signed in', result.userId);
+        }}
+      />
+      {signIn.element}
+    </>
+  );
+}
+```
+
+It is the whole screen on phones and a centred card on tablets (600dp and wider), and it cannot be closed while a
+sign-in runs. To put the form on a screen of your own: `<AbrovaSignInScreen auth={auth} options={...}
+onSignedIn={(r) => ...} />`; the modal as a component: `<AbrovaSignInModal auth={auth} visible={...} onClose={...}
+onSignedIn={...} />`.
+
+| Option | What it does |
+|---|---|
+| `appName`, `logo` | The title ("Sign in to My Shop") and an image above it (`require('./icon.png')` or `{ uri }`) |
+| `languageCode` | `en` or `fa` (right to left). Default: the phone's language. The e-mails follow it unless you set `auth.languageCode` yourself |
+| `color` | The button colour, for example `#1f6feb`. Dark mode follows the system |
+| `allowGuest` | Shows "Continue as guest" when anonymous sign-in is on. Off by default: every guest is a new user and counts toward your plan |
+| `google`, `apple` | A function that gets an ID token for the hashed nonce it is given (your Google / Apple sign-in library). The button shows only when you pass it |
+| `magicLinkRedirectUrl` | A link that opens your app; shows the magic link button. Your app finishes it with `signInWithMagicLink` |
+| `verifyRedirectUrl`, `resetRedirectUrl` | Your own pages for the confirm and reset links. Default: Abrova's pages |
+| `openUrl` | Opens the Telegram bot link (only an `https://t.me` link). Default: `Linking.openURL`; `null` shows the link as text |
+
+It uses only React Native's own components: nothing more to install.
+
 ## Sign-in methods
 
 ```typescript
 // E-mail + password
 await auth.signUpWithEmail({ email, password, redirectUrl: 'myapp://verify' });
 await auth.signInWithEmail({ email, password });
-await auth.sendPasswordReset({ email, redirectUrl: 'myapp://reset' });
+await auth.sendPasswordReset({ email, redirectUrl: 'myapp://reset' }); // no redirectUrl: Abrova's reset page
 await auth.resetPassword({ token, password });          // token from the link's ?token=
 await auth.verifyEmail({ token });
 
@@ -232,8 +276,8 @@ Common codes: `INVALID_CREDENTIALS`, `EMAIL_TAKEN`, `WEAK_PASSWORD`, `EMAIL_NOT_
 
 ## Example app
 
-[`example-app/`](example-app) is a React Native app (iOS and Android) with anonymous sign-in, e-mail sign-up and
-sign-in, sign-out, account deletion and the current user id. It uses this SDK from the repository
+[`example-app/`](example-app) is a React Native app (iOS and Android) with the ready-made sign-in screen, anonymous
+sign-in, e-mail sign-up and sign-in, sign-out, account deletion and the current user id. It uses this SDK from the repository
 (`"@abrova/auth-react-native": "file:.."`). See [example-app/README.md](example-app/README.md) to run it.
 
 ## Documentation

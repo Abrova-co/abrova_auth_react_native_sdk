@@ -12,6 +12,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import * as Keychain from 'react-native-keychain';
 import { createAbrovaAuth, isAbrovaAuthError, keychainStorage } from '@abrova/auth-react-native';
+import { useAbrovaSignIn } from '@abrova/auth-react-native/ui';
 
 // Your project's PUBLIC key from Abrova Console (ab_live_...). Never put the server secret in an app.
 const API_KEY = 'ab_live_YOUR_PUBLIC_KEY';
@@ -41,6 +42,8 @@ function AuthScreen() {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [log, setLog] = useState<{ id: number; text: string; error: boolean }[]>([]);
+  // The ready-made sign-in screen: full screen on phones, a card on tablets. Only the methods turned on show.
+  const signInScreen = useAbrovaSignIn(auth, { appName: 'Abrova Auth example', allowGuest: true });
 
   const addLog = useCallback((text: string, error = false) => {
     setLog((prev) => [{ id: Date.now() + Math.random(), text, error }, ...prev].slice(0, 50));
@@ -109,6 +112,18 @@ function AuthScreen() {
           <Line label="Methods" value={methods} />
           {busy && <ActivityIndicator style={styles.spinner} accessibilityLabel="Working" />}
         </View>
+
+        <Text style={styles.section} accessibilityRole="header">
+          Ready-made sign-in screen
+        </Text>
+        <Button
+          label="Open the ready-made sign-in screen"
+          disabled={busy}
+          onPress={async () => {
+            const result = await signInScreen.open();
+            addLog(result ? `Signed in with the sign-in screen: ${result.userId}` : 'Sign-in screen closed');
+          }}
+        />
 
         <Text style={styles.section} accessibilityRole="header">
           Anonymous
@@ -210,6 +225,7 @@ function AuthScreen() {
           </Text>
         ))}
       </ScrollView>
+      {signInScreen.element}
     </SafeAreaView>
   );
 }

@@ -1,3 +1,22 @@
+## [0.4.0] - 2026-11-08
+
+- Ready-made sign-in screens, like FirebaseUI: `import { useAbrovaSignIn } from '@abrova/auth-react-native/ui'`,
+  then `const result = await signIn.open()`. It opens a modal (the whole screen on phones, a centred card on
+  tablets) and answers `{ userId }` once the user signed in, or null when they closed it. `<AbrovaSignInScreen>` puts
+  the same form on a screen of your own, and `<AbrovaSignInModal>` is the modal as a component.
+  - Shows only the methods turned on in the Console: e-mail and password (sign in, create account, forgot password),
+    magic link, Telegram, Google, Apple and guest.
+  - English and Persian (right to left), from the phone's language or `languageCode`. The e-mails Abrova sends
+    follow the screen's language, unless you set `auth.languageCode` yourself.
+  - Change the look with `color`, `appName` and `logo`; dark mode follows the system.
+  - Google and Apple: pass a function that gets an ID token for the given hashed nonce (your Google / Apple sign-in
+    library). Magic link: pass `magicLinkRedirectUrl`. The Telegram bot link opens with `Linking` (or your `openUrl`).
+  - "Continue as guest" shows only with `allowGuest: true`: every guest is a new user and counts toward your plan.
+  - No new dependencies: only React Native's own components.
+- `sendPasswordReset`: `redirectUrl` is optional; without it the link opens Abrova's own reset page.
+- `baseUrl`: the Abrova Auth server the client talks to.
+- `isAbrovaAuthError` also recognises an error from another copy of the SDK (for example two bundles in one app).
+
 ## [0.3.0] - 2026-11-07
 
 - `languageCode` and `useDeviceLanguage()`, like Firebase: the language of the e-mails Abrova sends this user

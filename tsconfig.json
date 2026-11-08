@@ -14,7 +14,8 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "lib/typescript",
-    "rootDir": "src"
+    "rootDir": "src",
+    "jsx": "react"
   },
   "include": ["src", "types"],
   "exclude": ["node_modules", "lib"]

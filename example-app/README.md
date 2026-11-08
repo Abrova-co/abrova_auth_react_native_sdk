@@ -3,6 +3,7 @@
 A React Native app (iOS and Android) that uses `@abrova/auth-react-native` from this repository
 (`"@abrova/auth-react-native": "file:.."`). It shows:
 
+- the ready-made sign-in screen (`useAbrovaSignIn` from `@abrova/auth-react-native/ui`)
 - anonymous sign-in
 - e-mail + password sign-up and sign-in, and linking an e-mail to a guest
 - the current user id (`onAuthStateChanged`) and the project's enabled methods (`getMethods`)
