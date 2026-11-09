@@ -1,5 +1,13 @@
-/** The sign-in screens' texts in English and Persian (the same texts as the Flutter and web SDKs). */
-export type UiLanguage = 'en' | 'fa';
+/** The sign-in screens' texts: English, and each language in LANGUAGES (the same texts as the Flutter and web SDKs). */
+
+/** A language code the screens have a table for (see LANGUAGES); English for any other. */
+export type UiLanguage = string;
+
+/** One language of the screens. */
+export interface UiTable {
+  rtl: boolean;
+  texts: Record<string, string>;
+}
 
 const en: Record<string, string> = {
   "title": "Sign in",
@@ -58,61 +66,65 @@ const en: Record<string, string> = {
   "error.other": "Something went wrong. Try again.",
 };
 
-const fa: Record<string, string> = {
-  "title": "ورود",
-  "titleTo": "ورود به {app}",
-  "signUpTitle": "ساخت حساب",
-  "forgotTitle": "بازیابی رمز",
-  "magicTitle": "ورود با لینک",
-  "telegramTitle": "ورود با تلگرام",
-  "email": "ایمیل",
-  "password": "رمز",
-  "phone": "شماره موبایل",
-  "phoneHint": "+98 912 345 6789",
-  "code": "کد",
-  "signIn": "ورود",
-  "signUp": "ساخت حساب",
-  "noAccount": "حساب ندارید؟ بسازید",
-  "haveAccount": "حساب دارید؟ وارد شوید",
-  "forgot": "رمز را فراموش کرده‌اید؟",
-  "sendReset": "ارسال لینک بازیابی",
-  "sendLink": "ارسال لینک ورود",
-  "sendCode": "ارسال کد",
-  "verify": "تأیید",
-  "or": "یا",
-  "withEmailLink": "لینک ورود را ایمیل کن",
-  "withTelegram": "ادامه با تلگرام",
-  "withGoogle": "ادامه با گوگل",
-  "withApple": "ادامه با اپل",
-  "guest": "ادامه به‌عنوان مهمان",
-  "back": "بازگشت",
-  "close": "بستن",
-  "retry": "دوباره",
-  "checkEmail": "ایمیل خود را ببینید",
-  "resetSent": "اگر {email} حساب داشته باشد، لینک انتخاب رمز تازه برایش فرستاده شد.",
-  "linkSent": "لینک ورود به {email} فرستاده شد. آن را روی همین دستگاه باز کنید.",
-  "verifySent": "لینک تأیید به {email} فرستاده شد. ایمیل را تأیید کنید، سپس وارد شوید.",
-  "codeSent": "کدی را که تلگرام فرستاد وارد کنید.",
-  "botFirst": "یک بار {bot} را در تلگرام باز کنید و شماره خود را بفرستید، سپس دوباره امتحان کنید.",
-  "noMethods": "ورود فعلاً در دسترس نیست.",
-  "required": "لازم است",
-  "badEmail": "یک ایمیل درست وارد کنید",
-  "error.INVALID_CREDENTIALS": "ایمیل یا رمز اشتباه است.",
-  "error.EMAIL_TAKEN": "این ایمیل حساب دارد. وارد شوید.",
-  "error.EMAIL_NOT_VERIFIED": "اول ایمیل خود را تأیید کنید. صندوق ایمیل را ببینید.",
-  "error.WEAK_PASSWORD": "رمز بلندتری انتخاب کنید که رایج نباشد.",
-  "error.INVALID_INPUT": "آنچه وارد کردید را بررسی کنید.",
-  "error.TOKEN_INVALID": "این کد اشتباه است یا منقضی شده.",
-  "error.RATE_LIMITED": "تلاش‌ها زیاد بود. کمی صبر کنید و دوباره امتحان کنید.",
-  "error.USER_DISABLED": "این حساب غیرفعال است.",
-  "error.METHOD_DISABLED": "این روش ورود خاموش است.",
-  "error.PRODUCT_DISABLED": "ورود فعلاً در دسترس نیست.",
-  "error.MAU_LIMIT": "ورود فعلاً در دسترس نیست.",
-  "error.NETWORK_ERROR": "اتصال برقرار نیست. اینترنت را بررسی کنید و دوباره امتحان کنید.",
-  "error.PROVIDER_ALREADY_LINKED": "این حساب به کاربر دیگری وصل است.",
-  "error.INVALID_ID_TOKEN": "ورود تأیید نشد. دوباره امتحان کنید.",
-  "error.VERIFY_NOT_SENT": "حساب ساخته شد، اما ایمیل تأیید فرستاده نشد. بعداً با «رمز را فراموش کرده‌اید؟» دوباره امتحان کنید.",
-  "error.other": "مشکلی پیش آمد. دوباره امتحان کنید.",
+/** Persian, right to left. */
+const fa: UiTable = {
+  rtl: true,
+  texts: {
+    "title": "ورود",
+    "titleTo": "ورود به {app}",
+    "signUpTitle": "ساخت حساب",
+    "forgotTitle": "بازیابی رمز",
+    "magicTitle": "ورود با لینک",
+    "telegramTitle": "ورود با تلگرام",
+    "email": "ایمیل",
+    "password": "رمز",
+    "phone": "شماره موبایل",
+    "phoneHint": "+98 912 345 6789",
+    "code": "کد",
+    "signIn": "ورود",
+    "signUp": "ساخت حساب",
+    "noAccount": "حساب ندارید؟ بسازید",
+    "haveAccount": "حساب دارید؟ وارد شوید",
+    "forgot": "رمز را فراموش کرده‌اید؟",
+    "sendReset": "ارسال لینک بازیابی",
+    "sendLink": "ارسال لینک ورود",
+    "sendCode": "ارسال کد",
+    "verify": "تأیید",
+    "or": "یا",
+    "withEmailLink": "لینک ورود را ایمیل کن",
+    "withTelegram": "ادامه با تلگرام",
+    "withGoogle": "ادامه با گوگل",
+    "withApple": "ادامه با اپل",
+    "guest": "ادامه به‌عنوان مهمان",
+    "back": "بازگشت",
+    "close": "بستن",
+    "retry": "دوباره",
+    "checkEmail": "ایمیل خود را ببینید",
+    "resetSent": "اگر {email} حساب داشته باشد، لینک انتخاب رمز تازه برایش فرستاده شد.",
+    "linkSent": "لینک ورود به {email} فرستاده شد. آن را روی همین دستگاه باز کنید.",
+    "verifySent": "لینک تأیید به {email} فرستاده شد. ایمیل را تأیید کنید، سپس وارد شوید.",
+    "codeSent": "کدی را که تلگرام فرستاد وارد کنید.",
+    "botFirst": "یک بار {bot} را در تلگرام باز کنید و شماره خود را بفرستید، سپس دوباره امتحان کنید.",
+    "noMethods": "ورود فعلاً در دسترس نیست.",
+    "required": "لازم است",
+    "badEmail": "یک ایمیل درست وارد کنید",
+    "error.INVALID_CREDENTIALS": "ایمیل یا رمز اشتباه است.",
+    "error.EMAIL_TAKEN": "این ایمیل حساب دارد. وارد شوید.",
+    "error.EMAIL_NOT_VERIFIED": "اول ایمیل خود را تأیید کنید. صندوق ایمیل را ببینید.",
+    "error.WEAK_PASSWORD": "رمز بلندتری انتخاب کنید که رایج نباشد.",
+    "error.INVALID_INPUT": "آنچه وارد کردید را بررسی کنید.",
+    "error.TOKEN_INVALID": "این کد اشتباه است یا منقضی شده.",
+    "error.RATE_LIMITED": "تلاش‌ها زیاد بود. کمی صبر کنید و دوباره امتحان کنید.",
+    "error.USER_DISABLED": "این حساب غیرفعال است.",
+    "error.METHOD_DISABLED": "این روش ورود خاموش است.",
+    "error.PRODUCT_DISABLED": "ورود فعلاً در دسترس نیست.",
+    "error.MAU_LIMIT": "ورود فعلاً در دسترس نیست.",
+    "error.NETWORK_ERROR": "اتصال برقرار نیست. اینترنت را بررسی کنید و دوباره امتحان کنید.",
+    "error.PROVIDER_ALREADY_LINKED": "این حساب به کاربر دیگری وصل است.",
+    "error.INVALID_ID_TOKEN": "ورود تأیید نشد. دوباره امتحان کنید.",
+    "error.VERIFY_NOT_SENT": "حساب ساخته شد، اما ایمیل تأیید فرستاده نشد. بعداً با «رمز را فراموش کرده‌اید؟» دوباره امتحان کنید.",
+    "error.other": "مشکلی پیش آمد. دوباره امتحان کنید.",
+  },
 };
 
 export interface UiStrings {
@@ -123,10 +135,17 @@ export interface UiStrings {
   error(code: string): string;
 }
 
-/** Persian for `fa*`, English for everything else. */
+/** The languages of the screens, by the part of a language code before "-" or "_" ("en-US" → "en"). */
+const LANGUAGES: Record<string, UiTable> = {
+  en: { rtl: false, texts: en },
+  fa,
+};
+
+/** The table of `languageCode` when the screens have one, English for everything else. */
 export function uiStrings(languageCode: string | null | undefined): UiStrings {
-  const lang: UiLanguage = (languageCode ?? '').toLowerCase().startsWith('fa') ? 'fa' : 'en';
-  const table = lang === 'fa' ? fa : en;
+  const code = (languageCode ?? '').trim().toLowerCase().split(/[-_]/)[0] ?? '';
+  const lang: UiLanguage = Object.prototype.hasOwnProperty.call(LANGUAGES, code) ? code : 'en';
+  const { rtl, texts: table } = LANGUAGES[lang]!;
   const t = (key: string) => table[key] ?? en[key] ?? key;
-  return { lang, rtl: lang === 'fa', t, error: (code) => table[`error.${code}`] ?? en[`error.${code}`] ?? t('error.other') };
+  return { lang, rtl, t, error: (code) => table[`error.${code}`] ?? en[`error.${code}`] ?? t('error.other') };
 }

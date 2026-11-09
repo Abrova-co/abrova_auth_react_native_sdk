@@ -26,7 +26,7 @@ export interface AbrovaAuthConfig {
   fetch?: FetchLike;
   /**
    * Language of the e-mails Abrova sends this user (confirm e-mail, password reset, magic link), as a BCP 47 tag such
-   * as `fa` or `en-US`. Unset: the project's template language. Same as setting `auth.languageCode` later.
+   * as `de` or `en-US`. Unset: the project's template language. Same as setting `auth.languageCode` later.
    */
   languageCode?: string | null;
 }

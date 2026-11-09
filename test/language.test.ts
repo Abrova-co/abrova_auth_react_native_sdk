@@ -22,9 +22,9 @@ describe('languageCode (the e-mail language, like Firebase)', () => {
   });
 
   it('is sent as x-abrova-locale once set, from the config or later', async () => {
-    const a = setup({ languageCode: 'fa' });
+    const a = setup({ languageCode: 'de' });
     await send(a.auth);
-    expect(a.calls[0].headers['x-abrova-locale']).toBe('fa');
+    expect(a.calls[0].headers['x-abrova-locale']).toBe('de');
     a.auth.languageCode = 'en-US';
     await send(a.auth);
     expect(a.calls[1].headers['x-abrova-locale']).toBe('en-US');
@@ -35,19 +35,19 @@ describe('languageCode (the e-mail language, like Firebase)', () => {
 
   it('ignores values that are not a language tag', () => {
     const { auth } = setup();
-    for (const bad of ['', '  ', 'fa\r\nX: y', 'x'.repeat(40), '12']) {
+    for (const bad of ['', '  ', 'de\r\nX: y', 'x'.repeat(40), '12']) {
       auth.languageCode = bad;
       expect(auth.languageCode).toBeNull();
     }
   });
 
   it("useDeviceLanguage() takes the phone's language", async () => {
-    const spy = vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({ resolvedOptions: () => ({ locale: 'fa-IR' }) })) as any);
+    const spy = vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({ resolvedOptions: () => ({ locale: 'de-AT' }) })) as any);
     const { auth, calls } = setup();
     auth.useDeviceLanguage();
-    expect(auth.languageCode).toBe('fa-IR');
+    expect(auth.languageCode).toBe('de-AT');
     await send(auth);
-    expect(calls[0].headers['x-abrova-locale']).toBe('fa-IR');
+    expect(calls[0].headers['x-abrova-locale']).toBe('de-AT');
     spy.mockRestore();
   });
 });

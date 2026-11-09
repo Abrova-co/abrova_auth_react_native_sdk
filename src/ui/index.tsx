@@ -36,7 +36,9 @@ function useSignIn(auth: AbrovaAuth, options: SignInUiOptions, onSignedIn: (resu
   const [, refresh] = React.useReducer((n: number) => n + 1, 0);
   const latest = React.useRef({ options, onSignedIn });
   latest.current = { options, onSignedIn };
-  const lang = uiStrings(options.languageCode ?? deviceLanguage()).lang;
+  const chosen = uiStrings(options.languageCode ?? deviceLanguage());
+  const lang = chosen.lang;
+  const rtl = chosen.rtl;
   const [c, setC] = React.useState<SignInController | null>(null);
 
   React.useEffect(() => {
@@ -52,7 +54,7 @@ function useSignIn(auth: AbrovaAuth, options: SignInUiOptions, onSignedIn: (resu
 
   const scheme = useColorScheme();
   const theme = React.useMemo(() => uiTheme(scheme === 'dark', options.color), [scheme, options.color]);
-  const dir = React.useMemo(() => uiDirection(lang === 'fa'), [lang]);
+  const dir = React.useMemo(() => uiDirection(rtl), [rtl]);
   if (!c || c.auth !== auth || c.strings.lang !== lang) return null;
   c.options = withDefaults(options);
   return { c, theme, dir, refresh };

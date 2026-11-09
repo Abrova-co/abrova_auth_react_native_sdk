@@ -59,7 +59,7 @@ interface FieldProps {
   value: string;
   onChange: (v: string) => void;
   error?: string | null;
-  /** E-mail, phone and code stay left to right in Persian too. */
+  /** E-mail, phone and code stay left to right in a right-to-left language too. */
   ltr?: boolean;
   secure?: boolean;
   keyboardType?: KeyboardTypeOptions;
@@ -293,7 +293,7 @@ function Message({ x }: { x: Ctx }) {
       <Header x={x} title={t('checkEmail')} />
       <P x={x} k="sent" center>
         {before ?? ''}
-        {/* The address stays left to right inside a Persian sentence. */}
+        {/* The address stays left to right inside a right-to-left sentence. */}
         {`⁦${c.email.trim()}⁩`}
         {after ?? ''}
       </P>

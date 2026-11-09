@@ -371,12 +371,12 @@ describe('7. one action at a time', () => {
 describe('9. the e-mail language', () => {
   it('follows the open screen, is given back on close, and never replaces the app’s own choice', async () => {
     const f = fake(['password']);
-    const a = await screen(f.auth, { languageCode: 'fa' });
-    expect(f.auth.languageCode).toBe('fa');
+    const a = await screen(f.auth, { languageCode: 'en' });
+    expect(f.auth.languageCode).toBe('en');
     a.c.close();
     expect(f.auth.languageCode).toBeNull();
     f.auth.languageCode = 'en-US'; // the app chooses
-    const b = await screen(f.auth, { languageCode: 'fa' });
+    const b = await screen(f.auth, { languageCode: 'en' });
     expect(f.auth.languageCode).toBe('en-US');
     b.c.close();
     expect(f.auth.languageCode).toBe('en-US');
@@ -384,17 +384,17 @@ describe('9. the e-mail language', () => {
 
   it('two screens open: closing one keeps the language; the last one gives it back', async () => {
     const f = fake(['password']);
-    const a = await screen(f.auth, { languageCode: 'fa' });
-    const b = await screen(f.auth, { languageCode: 'fa' });
+    const a = await screen(f.auth, { languageCode: 'en' });
+    const b = await screen(f.auth, { languageCode: 'en' });
     a.c.close();
-    expect(f.auth.languageCode).toBe('fa');
+    expect(f.auth.languageCode).toBe('en');
     b.c.close();
     expect(f.auth.languageCode).toBeNull();
   });
 
   it('the app changing the language while a screen is open keeps the app’s value after close', async () => {
     const f = fake(['password']);
-    const a = await screen(f.auth, { languageCode: 'fa' });
+    const a = await screen(f.auth, { languageCode: 'en' });
     f.auth.languageCode = 'de';
     a.c.close();
     expect(f.auth.languageCode).toBe('de');
@@ -402,7 +402,7 @@ describe('9. the e-mail language', () => {
 
   it('a second load of the same screen (Try again) does not count twice', async () => {
     const f = fake(['password']);
-    const a = await screen(f.auth, { languageCode: 'fa' });
+    const a = await screen(f.auth, { languageCode: 'en' });
     await a.c.load();
     a.c.close();
     expect(f.auth.languageCode).toBeNull();
@@ -410,10 +410,19 @@ describe('9. the e-mail language', () => {
 });
 
 describe('strings', () => {
-  it('Persian for fa*, English otherwise', () => {
-    expect(uiStrings('fa-IR').lang).toBe('fa');
-    expect(uiStrings('de-DE').lang).toBe('en');
-    expect(uiStrings(undefined).lang).toBe('en');
+  it('Persian for fa, fa-IR, fa_IR and FA', () => {
+    for (const code of ['fa', 'fa-IR', 'fa_IR', 'FA']) expect(uiStrings(code).lang).toBe('fa');
+    expect(uiStrings('fa').rtl).toBe(true);
     expect(uiStrings('fa').error('NOPE')).toBe('مشکلی پیش آمد. دوباره امتحان کنید.');
+  });
+
+  it('English for a language the screens do not have, or an odd code', () => {
+    for (const code of ['de-DE', undefined, null, '', 'constructor', '__proto__', 'toString']) {
+      const s = uiStrings(code);
+      expect(s.lang).toBe('en');
+      expect(s.rtl).toBe(false);
+      expect(s.t('title')).toBe('Sign in');
+    }
+    expect(uiStrings('en').error('NOPE')).toBe('Something went wrong. Try again.');
   });
 });

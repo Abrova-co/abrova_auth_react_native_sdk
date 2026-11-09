@@ -26,15 +26,20 @@ async function open(auth: AbrovaAuth, lang: string) {
 }
 
 describe.skipIf(!key)('sign-in screens on a real Abrova Auth project', () => {
-  it('sign up, wrong password, sign in, reset, magic link (Persian), guest', async () => {
+  it('sign up, wrong password, sign in, reset, magic link, guest', async () => {
     const auth = new AbrovaAuth({ apiKey: key, baseUrl, storage: new MemoryStorage() });
+    // The screens' language for the run, and the texts expected in it.
+    let lang = 'en';
+    let expected = { title: 'Sign in to Tikashop', wrong: 'Wrong e-mail or password.' };
+    lang = 'fa';
+    expected = { title: 'ورود به Tikashop', wrong: 'ایمیل یا رمز اشتباه است.' };
 
     // Only the methods the project turned on.
-    let s = await open(auth, 'fa');
+    let s = await open(auth, lang);
     expect(s.c.view).toBe('home');
     expect([s.c.showPassword, s.c.showMagicLink, s.c.showGuest, s.c.showTelegram]).toEqual([true, true, true, false]);
-    expect(s.c.title).toBe('ورود به Tikashop');
-    expect(auth.languageCode).toBe('fa');
+    expect(s.c.title).toBe(expected.title);
+    expect(auth.languageCode).toBe(lang);
 
     s.c.go('signUp');
     s.c.email = email;
@@ -48,11 +53,11 @@ describe.skipIf(!key)('sign-in screens on a real Abrova Auth project', () => {
     expect(auth.languageCode).toBeNull();
     await auth.signOut();
 
-    s = await open(auth, 'fa');
+    s = await open(auth, lang);
     s.c.email = email;
     s.c.password = 'not-the-password-1';
     await s.c.signIn();
-    expect(s.c.errorText).toBe('ایمیل یا رمز اشتباه است.');
+    expect(s.c.errorText).toBe(expected.wrong);
     expect(s.signedIn).toEqual([]);
     s.c.password = password;
     await s.c.signIn();
@@ -62,7 +67,7 @@ describe.skipIf(!key)('sign-in screens on a real Abrova Auth project', () => {
     s.c.close();
     await auth.signOut();
 
-    s = await open(auth, 'fa');
+    s = await open(auth, lang);
     s.c.email = email;
     s.c.go('forgot');
     await s.c.sendReset();
@@ -71,7 +76,7 @@ describe.skipIf(!key)('sign-in screens on a real Abrova Auth project', () => {
     console.log('reset sent');
     s.c.close();
 
-    s = await open(auth, 'fa');
+    s = await open(auth, lang);
     s.c.go('magicLink');
     s.c.email = email;
     await s.c.sendMagicLink();
